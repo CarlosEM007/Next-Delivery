@@ -7,7 +7,10 @@ public class EquipGunMB : MonoBehaviour, IInteractable
     [Header("Audio Clip")]
     [SerializeField] private AudioClip gunTakedClip;
 
-    public event Action gunTaked;
+    [Header("Reference")]
+    [SerializeField] private GameObject block;
+
+    public event Action gunEquipedEvent;
 
     private string prompt = "Take the gun!";
 
@@ -21,16 +24,12 @@ public class EquipGunMB : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        gunTaked.Invoke();
+        gunEquipedEvent?.Invoke();
 
-        StartCoroutine(PlaySound());
-    }
-
-    private IEnumerator PlaySound()
-    {
         AudioManagerMB.Instance.PlaySFX(gunTakedClip);
 
-        yield return new WaitForSeconds(gunTakedClip.length);
+
+        if (block != null) Destroy(block);
 
         Destroy(gameObject);
     }
