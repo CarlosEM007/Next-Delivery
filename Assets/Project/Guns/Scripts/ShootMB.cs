@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,7 @@ public class ShootMB : MonoBehaviour
 {
     [Header("Gun Info")]
     [SerializeField] private GunInfoSO gunInfo;
+    [SerializeField] private int smokeEmition;
 
     [Header("Input")]
     [SerializeField] private InputActionReference shootAction;
@@ -12,6 +14,9 @@ public class ShootMB : MonoBehaviour
     [Header("Refence")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject bulletSpawner;
+
+    [Header("Smoke")]
+    [SerializeField] private ParticleSystem smokeParticles;
 
     private void OnEnable()
     {
@@ -42,6 +47,7 @@ public class ShootMB : MonoBehaviour
         gunInfo.bullets -= 1;
 
         Instantiate(bulletPrefab, bulletSpawner.transform.position, bulletSpawner.transform.rotation);
+        smokeParticles.Play();
     }
 
     private void NoAmmo()
