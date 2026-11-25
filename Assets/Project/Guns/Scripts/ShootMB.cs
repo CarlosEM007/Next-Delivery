@@ -18,6 +18,9 @@ public class ShootMB : MonoBehaviour
     [Header("Smoke")]
     [SerializeField] private ParticleSystem smokeParticles;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip shotSound;
+
     private void OnEnable()
     {
         shootAction.action.Enable();
@@ -48,6 +51,8 @@ public class ShootMB : MonoBehaviour
 
         Instantiate(bulletPrefab, bulletSpawner.transform.position, bulletSpawner.transform.rotation);
         smokeParticles.Play();
+
+        AudioManagerMB.Instance.PlaySFX(shotSound);
     }
 
     private void NoAmmo()
