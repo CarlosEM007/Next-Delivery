@@ -20,6 +20,9 @@ public class ShootMB : MonoBehaviour
 
     [Header("SFX")]
     [SerializeField] private AudioClip shotSound;
+    [SerializeField] private AudioClip reloadSound;
+
+    private bool canShoot = true;
 
     private void OnEnable()
     {
@@ -40,23 +43,30 @@ public class ShootMB : MonoBehaviour
 
     private void Shoot(InputAction.CallbackContext context)
     {
+        if (!canShoot) return;
+
         if (gunInfo.bullets == 0)
         {
-            NoAmmo();
+            StartCoroutine(PlayReload());
             return;
         }
-
 
         gunInfo.bullets -= 1;
 
         Instantiate(bulletPrefab, bulletSpawner.transform.position, bulletSpawner.transform.rotation);
-        smokeParticles.Play();
 
         AudioManagerMB.Instance.PlaySFX(shotSound);
+        StartCoroutine(PlayReload());
+
+        smokeParticles.Play();
     }
 
-    private void NoAmmo()
+    private IEnumerator PlayReload()
     {
+        canShoot = false;
+        AudioManagerMB.Instance.PlaySFX(reloadSound);
 
+        yield return new WaitForSeconds(reloadSound.length);
+        canShoot = true;
     }
 }
